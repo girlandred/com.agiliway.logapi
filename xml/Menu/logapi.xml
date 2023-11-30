@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<menu>
+    <item>
+        <path>civicrm/logapi/ajax/api-request-track</path>
+        <page_callback>CRM_Logapi_Page_AJAX_ApiRequestTrack::getApiRequestTracks</page_callback>
+        <title>ApiRequestTrack</title>
+        <access_arguments>access CiviCRM</access_arguments>
+    </item>
+    <item>
+        <path>civicrm/logapi/api-request-track</path>
+        <page_callback>CRM_Logapi_Form_ApiRequestTrack</page_callback>
+        <title>ApiRequestTrack</title>
+        <access_arguments>access CiviCRM</access_arguments>
+    </item>
+    <item>
+        <path>civicrm/logapi/api-request-settings</path>
+        <page_callback>CRM_Logapi_Form_ApiRequestSettings</page_callback>
+        <title>ApiRequestSettings</title>
+        <access_arguments>access CiviCRM</access_arguments>
+    </item>
+</menu>
