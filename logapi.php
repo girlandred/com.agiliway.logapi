@@ -82,15 +82,53 @@ function logapi_civicrm_entityTypes(&$entityTypes): void {
 }
 
 function logapi_civicrm_api_exception($entity, $action, $apiParams, $errorMessage, $apiVersion): void {
-  CRM_Logapi_BAO_ApiRequestTrack::create([
-    'contact_id' => CRM_Core_Session::getLoggedInContactID(),
-    'entity' => $entity,
-    'action' => $action,
-    'response' => json_encode($apiParams),
-    'status' => $errorMessage
-  ]);
 
+  $entityActionSets = CRM_Logapi_Utils_Settings::getEntityActionSets();
+  $keywordSets = CRM_Logapi_Utils_Settings::getKeywordSets();
+
+  if (!empty($entityActionSets) || !empty($keywordSets)) {
+    $logException = false;
+
+    foreach ($entityActionSets as $set) {
+      if ($set['entity'] == $entity && $set['action'] == $action) {
+        $logException = true;
+        break;
+      }
+    }
+
+    foreach ($keywordSets as $keyword) {
+      if (str_contains(json_encode($apiParams), $keyword) || str_contains($errorMessage, $keyword)) {
+        $logException = true;
+        break;
+      }
+    }
+
+    if ($logException) {
+      CRM_Logapi_BAO_ApiRequestTrack::create([
+        'contact_id' => CRM_Core_Session::getLoggedInContactID(),
+        'entity' => $entity,
+        'action' => $action,
+        'response' => json_encode($apiParams),
+        'status' => $errorMessage
+      ]);
+    }
+  } else {
+    CRM_Logapi_BAO_ApiRequestTrack::create([
+      'contact_id' => CRM_Core_Session::getLoggedInContactID(),
+      'entity' => $entity,
+      'action' => $action,
+      'response' => json_encode($apiParams),
+      'status' => $errorMessage
+    ]);
+  }
 }
+
+
+//function logapi_civicrm_preProcess(string $formName, \CRM_Core_Form $form) {
+//  civicrm_api3('Event', 'getsingle', [
+//    'event_type_id' => ["Meeting", "Exhibition", "Fundraiser", "Workshop", "Conference", "Performance"],
+//  ]);
+//}
 
 function logapi_civicrm_navigationMenu(&$menu) {
   _logapi_civix_insert_navigation_menu($menu, NULL, [

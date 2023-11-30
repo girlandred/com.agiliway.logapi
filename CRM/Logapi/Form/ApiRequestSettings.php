@@ -2,21 +2,18 @@
 
 use CRM_Logapi_ExtensionUtil as E;
 
-/**
- * Form controller class
- *
- * @see https://docs.civicrm.org/dev/en/latest/framework/quickform/
- */
 class CRM_Logapi_Form_ApiRequestSettings extends CRM_Core_Form {
 
   public function buildQuickForm(): void {
     $this->setTitle(E::ts('Api Requests Tracker Settings'));
 
-    $this->add('textarea', CRM_Logapi_Utils_Settings::LOGAPI_ENTITY_ACTION_TO_RECORD, E::ts('Define regular expressions for entity and action'), [
+    $this->add('text', CRM_Logapi_Utils_Settings::LOGAPI_ENTITY_ACTION_TO_RECORD, E::ts('Define regular expressions for entity and action'), [
       'placeholder' => E::ts('Enter regular expressions for entity and action, separated by commas (e.g., entity1.action1, entity2.action2)'),
     ]);
 
-    $this->add('textarea', CRM_Logapi_Utils_Settings::LOGAPI_KEYWORD_TO_RECORD, E::ts('Define regular expressions to record'));
+    $this->add('text', CRM_Logapi_Utils_Settings::LOGAPI_KEYWORD_TO_RECORD, E::ts('Define regular expressions to record'), [
+      'placeholder' => E::ts('Enter regular expressions for keywords, separated by __&__ (e.g., keyword1__&__keyword2)'),
+    ]);
 
     $this->addButtons([
       [
@@ -36,23 +33,35 @@ class CRM_Logapi_Form_ApiRequestSettings extends CRM_Core_Form {
   function postProcess(): void {
     $values = $this->exportValues();
 
-    $inputValue = $values[CRM_Logapi_Utils_Settings::LOGAPI_ENTITY_ACTION_TO_RECORD];
-    $entityActionPairs = explode(',', $inputValue);
-
-    $entities = $actions = [];
+    $entityActionPairs = explode(',', $values[CRM_Logapi_Utils_Settings::LOGAPI_ENTITY_ACTION_TO_RECORD]);
+    $entityActionSets = [];
     foreach ($entityActionPairs as $pair) {
       list($entity, $action) = explode('.', trim($pair), 2);
-      $entities[] = $entity;
-      $actions[] = $action;
+      $entityActionSets[] = ['entity' => $entity, 'action' => $action];
     }
 
-    $selectedKeyword = isset($values[CRM_Logapi_Utils_Settings::LOGAPI_KEYWORD_TO_RECORD]) ? $values[CRM_Logapi_Utils_Settings::LOGAPI_KEYWORD_TO_RECORD] : [];
+    $keywordSets = explode('__&__', $values[CRM_Logapi_Utils_Settings::LOGAPI_KEYWORD_TO_RECORD]);
 
-    CRM_Core_Session::setStatus(E::ts('Saved!'));
+    $existingEntityActionSets = CRM_Logapi_Utils_Settings::getEntityActionSets();
+    $existingKeywordSets = CRM_Logapi_Utils_Settings::getKeywordSets();
 
-    CRM_Logapi_Utils_Settings::setEntityToRecord($entities);
-    CRM_Logapi_Utils_Settings::setActionToRecord($actions);
-    CRM_Logapi_Utils_Settings::setKeywordToRecord($selectedKeyword);
+    if (empty($values[CRM_Logapi_Utils_Settings::LOGAPI_ENTITY_ACTION_TO_RECORD]) && empty($values[CRM_Logapi_Utils_Settings::LOGAPI_KEYWORD_TO_RECORD])) {
+      CRM_Logapi_Utils_Settings::setEntityActionSets([]);
+      CRM_Logapi_Utils_Settings::setKeywordSets([]);
+    } else {
+      $mergedEntityActionSets = array_merge($existingEntityActionSets, $entityActionSets);
+      $mergedKeywordSets = array_merge($existingKeywordSets, $keywordSets);
+
+      $mergedEntityActionSets = array_filter($mergedEntityActionSets, function ($set) {
+        return !empty($set['entity']) && !empty($set['action']);
+      });
+
+      $mergedKeywordSets = array_filter($mergedKeywordSets, 'strlen');
+
+      CRM_Logapi_Utils_Settings::setEntityActionSets($mergedEntityActionSets);
+      CRM_Logapi_Utils_Settings::setKeywordSets($mergedKeywordSets);
+    }
+
 
     parent::postProcess();
   }
@@ -60,17 +69,25 @@ class CRM_Logapi_Form_ApiRequestSettings extends CRM_Core_Form {
   function setDefaultValues(): array {
     $defaults = parent::setDefaultValues();
 
-    $selectedEntities = CRM_Logapi_Utils_Settings::getEntityToRecord();
-    $selectedActions = CRM_Logapi_Utils_Settings::getActionToRecord();
-    $selectedKeyword = CRM_Logapi_Utils_Settings::getKeywordToRecord();
+    $entityActionSets = CRM_Logapi_Utils_Settings::getEntityActionSets();
+    $keywordSets = CRM_Logapi_Utils_Settings::getKeywordSets();
 
-    $entityActionPairs = [];
-    foreach (array_map(null, $selectedEntities, $selectedActions) as [$entity, $action]) {
-      $entityActionPairs[] = "$entity.$action";
+    if (empty($entityActionSets) && empty($keywordSets)) {
+      $defaults[CRM_Logapi_Utils_Settings::LOGAPI_ENTITY_ACTION_TO_RECORD] = '';
+      $defaults[CRM_Logapi_Utils_Settings::LOGAPI_KEYWORD_TO_RECORD] = '';
+    } else {
+      if (!empty($entityActionSets) && is_array($entityActionSets)) {
+        $entityActionPairs = [];
+        foreach ($entityActionSets as $set) {
+          $entityActionPairs[] = "{$set['entity']}.{$set['action']}";
+        }
+        $defaults[CRM_Logapi_Utils_Settings::LOGAPI_ENTITY_ACTION_TO_RECORD] = implode(', ', $entityActionPairs);
+      }
+
+      if (!empty($keywordSets) && is_array($keywordSets)) {
+        $defaults[CRM_Logapi_Utils_Settings::LOGAPI_KEYWORD_TO_RECORD] = implode('__&__', $keywordSets);
+      }
     }
-
-    $defaults[CRM_Logapi_Utils_Settings::LOGAPI_ENTITY_ACTION_TO_RECORD] = implode(', ', $entityActionPairs);
-    $defaults[CRM_Logapi_Utils_Settings::LOGAPI_KEYWORD_TO_RECORD] = $selectedKeyword;
 
     return $defaults;
   }
