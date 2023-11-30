@@ -1,19 +1,24 @@
 # com.agiliway.logapi
 
-![Screenshot](/images/screenshot.png)
+![Screenshot](images/screenshot.png)
 
-(*FIXME: In one or two paragraphs, describe what the extension does and why one would download it. *)
+The extension structured as follows:
+
+Config: Allow to define which requests should be logged, for now it's can be filtered by keywords, entity and action. If
+config not set, then log all failed requests, regardless of the API endpoint.
+Log storage: For now support a simple table with
+entity/action/response/errorCode/errorMessage/apiVersion/user/createdTime
 
 The extension is licensed under [AGPL-3.0](LICENSE.txt).
 
 ## Requirements
 
 * PHP v7.4+
-* CiviCRM (*FIXME: Version number*)
 
 ## Installation (Web UI)
 
-Learn more about installing CiviCRM extensions in the [CiviCRM Sysadmin Guide](https://docs.civicrm.org/sysadmin/en/latest/customize/extensions/).
+Learn more about installing CiviCRM extensions in
+the [CiviCRM Sysadmin Guide](https://docs.civicrm.org/sysadmin/en/latest/customize/extensions/).
 
 ## Installation (CLI, Zip)
 
@@ -24,7 +29,9 @@ install it with the command-line tool [cv](https://github.com/civicrm/cv).
 cd <extension-dir>
 cv dl com.agiliway.logapi@https://github.com/FIXME/com.agiliway.logapi/archive/master.zip
 ```
+
 or
+
 ```bash
 cd <extension-dir>
 cv dl com.agiliway.logapi@https://lab.civicrm.org/extensions/com.agiliway.logapi/-/archive/main/com.agiliway.logapi-main.zip
@@ -39,16 +46,10 @@ install it with the command-line tool [cv](https://github.com/civicrm/cv).
 git clone https://github.com/FIXME/com.agiliway.logapi.git
 cv en logapi
 ```
+
 or
+
 ```bash
 git clone https://lab.civicrm.org/extensions/com.agiliway.logapi.git
 cv en logapi
 ```
-
-## Getting Started
-
-(* FIXME: Where would a new user navigate to get started? What changes would they see? *)
-
-## Known Issues
-
-(* FIXME *)

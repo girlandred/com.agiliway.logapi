@@ -2,10 +2,7 @@
 
 require_once 'logapi.civix.php';
 
-// phpcs:disable
 use CRM_Logapi_ExtensionUtil as E;
-
-// phpcs:enable
 
 /**
  * Implements hook_civicrm_config().
@@ -81,8 +78,7 @@ function logapi_civicrm_entityTypes(&$entityTypes): void {
   _logapi_civix_civicrm_entityTypes($entityTypes);
 }
 
-function logapi_civicrm_api_exception($entity, $action, $apiParams, $errorMessage, $apiVersion): void {
-
+function logapi_civicrm_api_exception($entity, $action, $apiParams, $errorMessage, $errorCode, $apiVersion): void {
   $entityActionSets = CRM_Logapi_Utils_Settings::getEntityActionSets();
   $keywordSets = CRM_Logapi_Utils_Settings::getKeywordSets();
 
@@ -109,7 +105,10 @@ function logapi_civicrm_api_exception($entity, $action, $apiParams, $errorMessag
         'entity' => $entity,
         'action' => $action,
         'response' => json_encode($apiParams),
-        'status' => $errorMessage
+        'errorMessage' => $errorMessage,
+        'errorCode' => $errorCode,
+        'apiVersion' => $apiVersion,
+        'created_date' => date('YmdHis')
       ]);
     }
   } else {
@@ -118,17 +117,13 @@ function logapi_civicrm_api_exception($entity, $action, $apiParams, $errorMessag
       'entity' => $entity,
       'action' => $action,
       'response' => json_encode($apiParams),
-      'status' => $errorMessage
+      'errorMessage' => $errorMessage,
+      'errorCode' => $errorCode,
+      'apiVersion' => $apiVersion,
+      'created_date' => date('YmdHis')
     ]);
   }
 }
-
-
-//function logapi_civicrm_preProcess(string $formName, \CRM_Core_Form $form) {
-//  civicrm_api3('Event', 'getsingle', [
-//    'event_type_id' => ["Meeting", "Exhibition", "Fundraiser", "Workshop", "Conference", "Performance"],
-//  ]);
-//}
 
 function logapi_civicrm_navigationMenu(&$menu) {
   _logapi_civix_insert_navigation_menu($menu, NULL, [
@@ -138,7 +133,7 @@ function logapi_civicrm_navigationMenu(&$menu) {
     'permission' => NULL,
     'operator' => NULL,
     'separator' => 0,
-    'icon' => 'crm-i fa-clock-o',
+    'icon' => 'crm-i fa-list-ul',
   ]);
 
   _logapi_civix_insert_navigation_menu($menu, 'logapi', [

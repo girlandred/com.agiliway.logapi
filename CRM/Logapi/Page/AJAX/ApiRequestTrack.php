@@ -23,10 +23,14 @@ class CRM_Logapi_Page_AJAX_ApiRequestTrack extends CRM_Core_Page {
     foreach ($apiRequestTracks as $apiRequestTrack) {
       $result['data'][] = [
         'id' => $apiRequestTrack['id'],
-        'request' => $apiRequestTrack['request'],
+        'entity' => $apiRequestTrack['entity'],
+        'action' => $apiRequestTrack['action'],
         'response' => $apiRequestTrack['response'],
-        'status' => $apiRequestTrack['status'],
+        'errorMessage' => $apiRequestTrack['errorMessage'],
+        'errorCode' => $apiRequestTrack['errorCode'],
+        'apiVersion' => $apiRequestTrack['apiVersion'],
         'contact_id' => $apiRequestTrack['contact_id'],
+        'created_date' => $apiRequestTrack['created_date'],
         'DT_RowId' => $apiRequestTrack['id'],
         'DT_RowAttr' => [
           'data-entity' => 'apiRequestTrack',

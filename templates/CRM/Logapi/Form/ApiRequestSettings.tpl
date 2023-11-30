@@ -6,14 +6,12 @@
     <table class="form-layout-compressed" id="logapi-filter-settings">
       <tbody>
       <tr class="logapi-set">
+        <td class="label"> {$form.logapi_entity_action_to_record.label} {help id="entity-action-to-record-help"}</td>
         <td class="crm-inline-edit-field">
-            {$form.logapi_entity_action_to_record.label}
-          <br>
             {$form.logapi_entity_action_to_record.html}
         </td>
+        <td class="label"> {$form.logapi_keyword_to_record.label} {help id="keyword-to-record-help"}</td>
         <td class="crm-inline-edit-field">
-            {$form.logapi_keyword_to_record.label}
-          <br>
             {$form.logapi_keyword_to_record.html}
         </td>
       </tr>
@@ -25,8 +23,7 @@
     <button class="crm-button" type="button" id="addSetButton">
         {ts domain=com.agiliway.logapi}Add Set{/ts}
     </button>
-    <button class="crm-button" type="button"
-            id="resetFieldsButton">
+    <button class="crm-button" type="button" id="resetFieldsButton">
         {ts domain=com.agiliway.logapi}Reset Fields{/ts}
     </button>
       {include file="CRM/common/formButtons.tpl" location="bottom"}

@@ -36,9 +36,13 @@ SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `civicrm_api_request_track` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique ApiRequestTrack ID',
   `contact_id` int unsigned COMMENT 'FK to Contact',
-  `request` text NULL,
-  `status` varchar(255) NULL,
+  `entity` varchar(255) NULL,
+  `action` varchar(255) NULL,
   `response` text NULL,
+  `errorMessage` varchar(255) NULL,
+  `errorCode` varchar(255) NULL,
+  `apiVersion` varchar(255) NULL,
+  `created_date` datetime COMMENT 'Date and time that request was created.',
   PRIMARY KEY (`id`),
   CONSTRAINT FK_civicrm_api_request_track_contact_id FOREIGN KEY (`contact_id`) REFERENCES `civicrm_contact`(`id`) ON DELETE CASCADE
 )

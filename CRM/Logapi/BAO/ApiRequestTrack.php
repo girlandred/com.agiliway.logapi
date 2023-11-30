@@ -42,20 +42,36 @@ class CRM_Logapi_BAO_ApiRequestTrack extends CRM_Logapi_DAO_ApiRequestTrack {
       $query->where('id = #id', ['id' => $params['id']]);
     }
 
-    if (!empty($params['request'])) {
-      $query->where('request = @request', ['request' => $params['request']]);
+    if (!empty($params['entity'])) {
+      $query->where('entity = @entity', ['entity' => $params['entity']]);
+    }
+
+    if (!empty($params['action'])) {
+      $query->where('action = @action', ['action' => $params['action']]);
     }
 
     if (!empty($params['response'])) {
       $query->where('response = @response', ['response' => $params['response']]);
     }
 
-    if (!empty($params['status'])) {
-      $query->where('status = @status', ['status' => $params['status']]);
+    if (!empty($params['errorMessage'])) {
+      $query->where('errorMessage = @errorMessage', ['errorMessage' => $params['errorMessage']]);
+    }
+
+    if (!empty($params['errorCode'])) {
+      $query->where('errorCode = @errorCode', ['errorCode' => $params['errorCode']]);
+    }
+
+    if (!empty($params['apiVersion'])) {
+      $query->where('apiVersion = @apiVersion', ['apiVersion' => $params['apiVersion']]);
     }
 
     if (!empty($params['contact_id'])) {
       $query->where('contact_id = @contact_id', ['contact_id' => $params['contact_id']]);
+    }
+
+    if (!empty($params['created_date'])) {
+      $query->where('created_date = @created_date', ['created_date' => $params['created_date']]);
     }
 
     return $query;

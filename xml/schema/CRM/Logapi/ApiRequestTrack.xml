@@ -34,15 +34,16 @@
     </foreignKey>
 
     <field>
-        <name>request</name>
-        <title>Request</title>
-        <type>text</type>
+        <name>entity</name>
+        <title>Entity</title>
+        <type>varchar</type>
+        <length>255</length>
         <required>false</required>
     </field>
 
     <field>
-        <name>status</name>
-        <title>Status</title>
+        <name>action</name>
+        <title>Action</title>
         <type>varchar</type>
         <length>255</length>
         <required>false</required>
@@ -54,5 +55,36 @@
         <type>text</type>
         <required>false</required>
     </field>
+
+    <field>
+        <name>errorMessage</name>
+        <title>Error Message</title>
+        <type>varchar</type>
+        <length>255</length>
+        <required>false</required>
+    </field>
+
+    <field>
+        <name>errorCode</name>
+        <title>Error Code</title>
+        <type>varchar</type>
+        <length>255</length>
+        <required>false</required>
+    </field>
+
+    <field>
+        <name>apiVersion</name>
+        <title>Api Version</title>
+        <type>varchar</type>
+        <length>255</length>
+        <required>false</required>
+    </field>
+
+    <field>
+        <name>created_date</name>
+        <type>datetime</type>
+        <title>Fail Request Created Date</title>
+    </field>
+
 
 </table>

@@ -8,11 +8,11 @@ class CRM_Logapi_Form_ApiRequestSettings extends CRM_Core_Form {
     $this->setTitle(E::ts('Api Requests Tracker Settings'));
 
     $this->add('text', CRM_Logapi_Utils_Settings::LOGAPI_ENTITY_ACTION_TO_RECORD, E::ts('Define regular expressions for entity and action'), [
-      'placeholder' => E::ts('Enter regular expressions for entity and action, separated by commas (e.g., entity1.action1, entity2.action2)'),
+      'placeholder' => E::ts('Enter Entity.action'),
     ]);
 
     $this->add('text', CRM_Logapi_Utils_Settings::LOGAPI_KEYWORD_TO_RECORD, E::ts('Define regular expressions to record'), [
-      'placeholder' => E::ts('Enter regular expressions for keywords, separated by __&__ (e.g., keyword1__&__keyword2)'),
+      'placeholder' => E::ts('Enter regular expressions'),
     ]);
 
     $this->addButtons([
@@ -35,6 +35,7 @@ class CRM_Logapi_Form_ApiRequestSettings extends CRM_Core_Form {
 
     $entityActionPairs = explode(',', $values[CRM_Logapi_Utils_Settings::LOGAPI_ENTITY_ACTION_TO_RECORD]);
     $entityActionSets = [];
+
     foreach ($entityActionPairs as $pair) {
       list($entity, $action) = explode('.', trim($pair), 2);
       $entityActionSets[] = ['entity' => $entity, 'action' => $action];
@@ -61,7 +62,6 @@ class CRM_Logapi_Form_ApiRequestSettings extends CRM_Core_Form {
       CRM_Logapi_Utils_Settings::setEntityActionSets($mergedEntityActionSets);
       CRM_Logapi_Utils_Settings::setKeywordSets($mergedKeywordSets);
     }
-
 
     parent::postProcess();
   }
