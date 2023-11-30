@@ -1,0 +1,12 @@
+{htxt id="entity-action-to-record-help-title"}
+{ts}Entity and Action{/ts}
+{/htxt}
+{htxt id="entity-action-to-record-help"}
+  <p>{ts}Enter regular expressions for entity and action, separated by commas (e.g., entity1.action1, entity2.action2){/ts}</p>
+{/htxt}
+{htxt id="keyword-to-record-help-title"}
+{ts}Keywords{/ts}
+{/htxt}
+{htxt id="keyword-to-record-help"}
+  <p>{ts}Enter regular expressions for keywords, separated by __&__ (e.g., keyword1__&__keyword2){/ts}</p>
+{/htxt}
