@@ -53,6 +53,10 @@ class CRM_Logapi_Form_ApiRequestSettings extends CRM_Core_Form {
       $mergedEntityActionSets = array_merge($existingEntityActionSets, $entityActionSets);
       $mergedKeywordSets = array_merge($existingKeywordSets, $keywordSets);
 
+      $mergedEntityActionSets = array_unique($mergedEntityActionSets, SORT_REGULAR);
+
+      $mergedKeywordSets = array_unique($mergedKeywordSets);
+
       $mergedEntityActionSets = array_filter($mergedEntityActionSets, function ($set) {
         return !empty($set['entity']) && !empty($set['action']);
       });
@@ -65,6 +69,7 @@ class CRM_Logapi_Form_ApiRequestSettings extends CRM_Core_Form {
 
     parent::postProcess();
   }
+
 
   function setDefaultValues(): array {
     $defaults = parent::setDefaultValues();

@@ -11,7 +11,7 @@
         <th data-data="response">{ts domain=com.agiliway.logapi}Response{/ts}</th>
         <th data-data="errorMessage">{ts domain=com.agiliway.logapi}Error Message{/ts}</th>
         <th data-data="errorCode">{ts domain=com.agiliway.logapi}Error Code{/ts}</th>
-        <th data-data="created_date">{ts domain=com.agiliway.logapi}Creeated At{/ts}</th>
+        <th data-data="created_date">{ts domain=com.agiliway.logapi}Created At{/ts}</th>
       </tr>
       </thead>
     </table>
